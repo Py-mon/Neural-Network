@@ -11,9 +11,11 @@ class Canvas(tk.CTkCanvas):
 
 
 class CanvasApp(tk.CTk):
-    def __init__(self, width, height, network: Network):
+    def __init__(self, width, height, network: Network, font_size = 18, between_y = 25):
 
         tk.CTk.__init__(self)
+        
+        self.title("Neural Network")
 
         self.font = tk.CTkFont(family="font1", weight="bold")
 
@@ -30,6 +32,9 @@ class CanvasApp(tk.CTk):
             relief="ridge",
         )
         self.canvas.pack()
+        
+        self.font_size = font_size
+        self.between_y = between_y
 
         self.network = network
 
@@ -46,14 +51,14 @@ class CanvasApp(tk.CTk):
         frame = tk.CTkFrame(self, corner_radius=30, width=width, height=height)
 
         def add_category(division):
-            category = tk.CTkLabel(frame, font=self.create_new_font(24), text=division)
+            category = tk.CTkLabel(frame, font=self.create_new_font(self.font_size), text=division)
 
             frame.update_idletasks()
 
             category.place(x=width // 2 - (category.winfo_reqwidth() // 2), y=y)
 
         padding = 20
-        y_increment = 35
+        y_increment = self.between_y
         y = 35
 
         def create_weight_func(connection):
@@ -71,8 +76,8 @@ class CanvasApp(tk.CTk):
             for neuron in connections:
                 slider = tk.CTkSlider(
                     frame,
-                    from_=neuron.MIN,
-                    to=neuron.MAX,
+                    from_=neuron.Min,
+                    to=neuron.Max,
                     width=width - (padding * 2),
                     command=create_weight_func(neuron),
                 )
@@ -109,4 +114,3 @@ class CanvasApp(tk.CTk):
             padding + (height // 2),
             window=frame,
         )
-

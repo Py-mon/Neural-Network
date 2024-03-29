@@ -29,32 +29,78 @@ mnist = keras.datasets.mnist
 # test = keras.utils.normalize(test, axis=1)
 
 # mutate the image a bit
+
+
+def shift_sideways(x, amt):
+    new = np.zeros_like(x)
+    if amt == 0:
+        return x
+    if amt > 0:
+        new[:,amt:] = x[:,:-amt]
+    else:
+        amt = -amt
+        new[:,:-amt] = x[:,amt:]
+    return new
+
+def shift_vertically(x, amt):
+    new = np.zeros_like(x)
+    if amt == 0:
+        return x
+    if amt > 0:
+        new[amt:,:] = x[:-amt,:]
+    else:
+        amt = -amt
+        new[:-amt,:] = x[amt:,:]
+    return new
+
+    
+import numpy as np
+
+def mutate(digit):
+    digit = imutils.rotate(digit, random.randint(-5, 5))
+    digit = shift_sideways(digit, random.randint(-1, 1))     
+    digit = shift_vertically(digit, random.randint(-1, 1)) 
+    return digit    
+    
 for i in range(len(train)):
-    train[i] = imutils.rotate(train[i], random.randint(-10, 10))
+    train[i] = mutate(train[i])   
+        
 for i in range(len(test)):
-    test[i] = imutils.rotate(test[i], random.randint(-10, 10))
+    test[i] = mutate(test[i])  
+    
 
+# img = train[1]
+# img = np.array([img])
 
-# model = keras.models.Sequential()
-# model.add(keras.layers.Flatten(input_shape=(28, 28)))
-# model.add(keras.layers.Dense(256, activation="relu"))
-# model.add(keras.layers.Dense(128, activation="relu"))
-# model.add(keras.layers.Dense(10, activation="softmax"))
+# fig, ax = plt.subplots()
 
-# model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+# ax.imshow(img[0], cmap=plt.cm.binary)
 
-# # sparse_categorical_crossentropy
+# plt.show()
 
-# model.fit(train, train_answers, epochs=16,)
+def train_model():
+    model = keras.models.Sequential()
+    model.add(keras.layers.Flatten(input_shape=(28, 28)))
+    model.add(keras.layers.Dense(256, activation="relu"))
+    model.add(keras.layers.Dense(256, activation="relu"))
+    model.add(keras.layers.Dense(10, activation="softmax"))
 
-# loss, accuracy = model.evaluate(test, test_answers)
+    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-# print(loss, accuracy)
+    # sparse_categorical_crossentropy
 
-# model.save("model.model")
+    model.fit(train, train_answers, epochs=8,)
+
+    loss, accuracy = model.evaluate(test, test_answers)
+
+    print(loss, accuracy)
+
+    model.save("model.model")
+    
+#train_model()
 
 model: keras.models.Model = keras.models.load_model("model.model")
-#age, bpm
+# age, bpm
 # for i in range(10):
 #     img = train[i]
 #     print(train_answers[i])
@@ -65,13 +111,12 @@ model: keras.models.Model = keras.models.load_model("model.model")
 
 #     plt.show()
 
-def read_grid(grid):
-    img = np.array([grid])
-    pred = model.predict(img)
-    
-    return np.argmax(pred)
- 
 
+def read_grid(grid):
+    img = np.abs([np.array(grid) - 255])
+    pred = model.predict(img)
+
+    return np.argmax(pred)
 
 
 # image_number = 0

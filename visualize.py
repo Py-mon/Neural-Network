@@ -9,8 +9,8 @@ from app import Canvas, CanvasApp
 
 
 class InputNeuron:
-    MAX = 1
-    MIN = 0
+    Max = 25
+    Min = -25
 
     def __init__(self, x: int, y: int, radius: int, app: CanvasApp):
         self.x = x
@@ -52,7 +52,7 @@ class InputNeuron:
 
         self.app.canvas.edit(
             self.circle,
-            fill=grayscale_from_value(activation, type(self).MIN, type(self).MAX),
+            fill=grayscale_from_value(activation, type(self).Min, type(self).Max),
         )
 
 
@@ -87,8 +87,8 @@ class Neuron(InputNeuron):
 
 
 class Connection:
-    MAX = 1
-    MIN = -1
+    Max = 25
+    Min = -25
 
     def __init__(
         self,
@@ -150,7 +150,7 @@ class Connection:
         self.app.canvas.edit(self.label, text=round3(weight))
 
         self.app.canvas.edit(
-            self.line, fill=grayscale_from_value(weight, type(self).MIN, type(self).MAX)
+            self.line, fill=grayscale_from_value(weight, type(self).Min, type(self).Max)
         )
 
         i, j, k = self._weight
@@ -161,7 +161,7 @@ class NetworkVisualization:
     def __init__(
         self,
         app: CanvasApp,
-        input_visual: tuple[float, float],
+        input_visual: tuple[float, ...],
         extra_func,
         between_y=100,
         between_x=300,
@@ -169,9 +169,6 @@ class NetworkVisualization:
         padding=100,
     ) -> None:
         self.app = app
-
-        if self.app.network.inputs != 2:
-            raise ValueError(f"Unable to visualize {app.network.inputs}d network")
 
         self.network = self.app.network
         self.input_visual = input_visual
@@ -198,7 +195,9 @@ class NetworkVisualization:
             ) + padding
 
         x = padding
-        y = layer_offset(self.input_visual)
+        y = padding
+        if not even_size_layers:
+            y = layer_offset(self.input_visual)
 
         input_neurons = []
 
@@ -266,9 +265,6 @@ class NetworkVisualization:
                 self.neurons[i][j].set_activation(activation)
 
         self.extra_func()
-
-    def update_network2(self):
-        self.update_network()
 
         for i, layer in enumerate(self.app.network.biases):
             for j, activation in enumerate(layer):

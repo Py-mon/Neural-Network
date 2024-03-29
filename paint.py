@@ -19,7 +19,7 @@ numberOfRows = 28
 numberOfColumns = 28
 # grid = Grid(numberOfRows, numberOfColumns)
 grid = [
-    [0 for x in range(numberOfRows)] for y in range(numberOfColumns)
+    [255 for x in range(numberOfRows)] for y in range(numberOfColumns)
 ]  # use array for grid: 0=white, 1=black
 
 # Medidas
@@ -33,8 +33,12 @@ def drawScreen(screen, grid):  # draw rectangles from grid array
             if grid[i][j]:
                 # print('yes')
                 # print(i, j)
+                # print(grid[i][j])
+                grid[i][j] = max(grid[i][j], 1)
                 pygame.draw.rect(
-                    screen, (0, 0, 0), (j * basicX, i * basicY, basicX, basicY)
+                    screen,
+                    (grid[i][j], grid[i][j], grid[i][j]),
+                    (j * basicX, i * basicY, basicX, basicY),
                 )
 
 
@@ -51,12 +55,6 @@ clear_text = font.render(clear_text, True, (0, 0, 0))
 clear_rect = clear_text.get_rect()
 clear_rect.center = (width // 2 - 100, height - 100)
 
-# network_text = "Network"
-# network_text = font.render(network_text, True, (0, 0, 0))
-# # Create a pygame.Rect object that represents the button's boundaries
-# network_rect = network_text.get_rect()
-# network_rect.center = (width // 2 + 200, height - 100)
-
 
 Number = ""
 
@@ -68,7 +66,6 @@ def update():
     number_rect = number_text.get_rect()
     number_rect.center = (width // 2 + 100, height - 100)
 
-
     screen.blit(number_text, number_rect)
     drawScreen(screen, grid)
     pygame.display.flip()
@@ -77,7 +74,7 @@ def update():
 def clearScreen():
     global grid
     screen.fill((255, 255, 255))
-    grid = [[0 for x in range(numberOfRows)] for y in range(numberOfColumns)]
+    grid = [[255 for x in range(numberOfRows)] for y in range(numberOfColumns)]
 
 
 right_clicking = 0
@@ -108,7 +105,7 @@ while True:
             xInGrid = int(x / basicX)
             yInGrid = int(y / basicY)
             try:
-                grid[yInGrid][xInGrid] = 0
+                grid[yInGrid][xInGrid] = 255
             except IndexError:
                 continue
 
@@ -124,14 +121,18 @@ while True:
             xInGrid = int(x / basicX)
             yInGrid = int(y / basicY)
             try:
-                grid[yInGrid][xInGrid] = 255
+                grid[yInGrid][xInGrid] -= 25
+                grid[yInGrid][xInGrid + 1] -= 6
+                grid[yInGrid][xInGrid - 1] -= 6
+                grid[yInGrid + 1][xInGrid] -= 6
+                grid[yInGrid - 1][xInGrid] -= 6
             except IndexError:
                 left_clicking = 0
                 continue
 
-            pygame.draw.rect(
-                screen, (0, 0, 0), (xInGrid * basicX, yInGrid * basicY, basicX, basicY)
-            )
+            # pygame.draw.rect(
+            #     screen, (0, 0, 0), (xInGrid * basicX, yInGrid * basicY, basicX, basicY)
+            # )
 
         if event.type == pygame.MOUSEBUTTONUP:
             left_clicking = 0
