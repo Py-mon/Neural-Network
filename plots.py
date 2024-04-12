@@ -54,8 +54,8 @@ class Network:
         self.layers_setup = layers
         self.weights = [random_num((y, x)) for x, y in zip(layers[:-1], layers[1:])]
 
-        self.cost_gradient_weights = [np.empty_like(x) for x in self.weights]
-        self.cost_gradient_biases = [np.empty_like(x) for x in self.biases]
+        self.loss_gradient_weights = [np.empty_like(x) for x in self.weights]
+        self.loss_gradient_biases = [np.empty_like(x) for x in self.biases]
 
         self.variable1: tuple[list, int, int, int] = (self.weights, 0, 0, 0)
         self.variable2: tuple[list, int, int, int] = (self.weights, 1, 0, 0)
@@ -81,34 +81,34 @@ class Network:
     def __call__(self, inputs):
         return self.feed_forward(inputs)
 
-    def cost(self, prediction, label):
+    def loss(self, prediction, label):
         # have multiple output nodes
         # return (prediction - label) ** 2
         return np.sum((prediction - label) ** 2)
 
-    def get_cost(self, input, labels):
-        # cost = 0
+    def get_loss(self, input, labels):
+        # loss = 0
         # for i, inputs in enumerate(input):
         #     output = self.feed_forward(inputs)
         #     label = np.zeros(10)
         #     label[labels[i]] = 1
-        #     cost += self.cost(output, label)
-        # print(cost)
-        # return cost
+        #     loss += self.loss(output, label)
+        # print(loss)
+        # return loss
 
-        #outputs = np.array([self(input_vector) for input_vector in input])
-        
+        # outputs = np.array([self(input_vector) for input_vector in input])
+
         outputs = self(input)
 
-        cost = self.cost(outputs, labels)
+        loss = self.loss(outputs, labels)
 
-        return cost
+        return loss
 
     def expand_range(self, minimum, maximum, percent):
         """Expands a linspace range correctly with negatives by an percent."""
         return minimum - abs(minimum * percent), maximum + abs(maximum * percent)
 
-    def calculate_costs_of_weights(
+    def calculate_losss_of_weights(
         self,
         input,
         output,
@@ -129,11 +129,11 @@ class Network:
                 parameter[layer_index][index] = variable1
                 parameter, layer_index, *index = self.variable2
                 parameter[layer_index][index] = variable2
-                cost = self.get_cost(input, output)
+                loss = self.get_loss(input, output)
                 index = i * points + j
                 x[index] = variable1
                 y[index] = variable2
-                z[i, j] = cost
+                z[i, j] = loss
         return x, y, z
 
     def plot_2d_gradient(self, input, labels, points=500, value=10):
@@ -144,13 +144,13 @@ class Network:
            \\
             |
             """
-        x, y, z = self.calculate_costs_of_weights(
+        x, y, z = self.calculate_losss_of_weights(
             input,
             labels,
             points,
             value,
         )
-        
+
         print(x, y, z)
 
         # Plot Image
@@ -166,7 +166,7 @@ class Network:
         plt.show()
 
     def plot_3d_gradient(self, input, labels, points=20, value=10, path=True):
-        x, y, z = self.calculate_costs_of_weights(
+        x, y, z = self.calculate_losss_of_weights(
             input,
             labels,
             points,
@@ -183,7 +183,7 @@ class Network:
         # ax.set_zscale('symlog')
         ax.set_xlabel("weight1")
         ax.set_ylabel("weight2")
-        ax.set_zlabel("cost")
+        ax.set_zlabel("loss")
         if path:
             ax.scatter(*np.transpose(self.path), color="r")
 
@@ -201,14 +201,14 @@ class Network:
 
     def learn(self, input, labels, learn_rate=1, plot=False):
         h = 0.000001
-        original_cost = self.get_cost(input, labels)
+        original_loss = self.get_loss(input, labels)
 
-        def add_path(cost):
+        def add_path(loss):
             self.path += (
                 (
                     self.get_variable(self.variable1),
                     self.get_variable(self.variable2),
-                    cost,
+                    loss,
                 ),
             )
 
@@ -216,33 +216,33 @@ class Network:
             for i, weights in enumerate(self.weights[layer_i]):
                 for j, _ in enumerate(weights):
                     self.weights[layer_i, i, j] += h
-                    cost = self.get_cost(input, labels)
-                    change_in_cost = cost - original_cost
+                    loss = self.get_loss(input, labels)
+                    change_in_loss = loss - original_loss
 
-                    # if change_in_cost / h * learn_rate < 0.01:
+                    # if change_in_loss / h * learn_rate < 0.01:
                     #     print("R")
                     #     self.randomize()
                     #     self.null_biases()
                     #     continue
 
-                    # add_path(cost)
+                    # add_path(loss)
                     self.weights[layer_i, i, j] -= h
 
-                    self.cost_gradient_weights[layer_i][i][j] = change_in_cost / h
+                    self.loss_gradient_weights[layer_i][i][j] = change_in_loss / h
 
             for i, _ in enumerate(self.biases[layer_i]):
                 self.biases[layer_i, i] += h
-                change_in_cost = self.get_cost(input, labels) - original_cost
+                change_in_loss = self.get_loss(input, labels) - original_loss
                 self.biases[layer_i, i] -= h
-                self.cost_gradient_biases[layer_i, i] = change_in_cost / h
+                self.loss_gradient_biases[layer_i, i] = change_in_loss / h
 
         for i in range(self.num_layers - 1):
-            self.biases[i] -= self.cost_gradient_biases[i] * learn_rate
-            self.weights[i] -= self.cost_gradient_weights[i] * learn_rate
+            self.biases[i] -= self.loss_gradient_biases[i] * learn_rate
+            self.weights[i] -= self.loss_gradient_weights[i] * learn_rate
 
-        cost = self.get_cost(input, labels)
-        add_path(cost)
-        print(cost)
+        loss = self.get_loss(input, labels)
+        add_path(loss)
+        print(loss)
 
 
 # n = Network([784, 128, 10])
@@ -276,7 +276,7 @@ class Network:
 
 # print(train, print(len(train[0])))
 
-# print(n.get_cost(train, train_labels))
+# print(n.get_loss(train, train_labels))
 # for _ in range(200):
 #     n.learn(train, train_labels, plot=True)
 
@@ -286,7 +286,7 @@ input = [0.5]
 output = [0.5]
 print(n.get_variable(n.variable1))
 print(n.get_variable(n.variable2))
-print(n.get_cost(input, output))
+print(n.get_loss(input, output))
 n.plot_2d_gradient(input, output)
 n.plot_3d_gradient(input, output, value=0.5)
 n.plot_3d_gradient(input, output, value=2)

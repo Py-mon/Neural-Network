@@ -9,7 +9,7 @@ def grayscale_from_value(value, min_, max_):
 
     percent = normalize(value)
     make_in_bounds = min(max(percent, min_), max_)
-    shade = round(make_in_bounds * 200)
+    shade = max(0, round(make_in_bounds * 200))
 
     def from_rgb(rgb):
         return "#%02x%02x%02x" % rgb

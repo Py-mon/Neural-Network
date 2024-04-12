@@ -97,7 +97,7 @@ def train_model():
 
     model.save("model.model")
     
-#train_model()
+# train_model()
 
 model: keras.models.Model = keras.models.load_model("model.model")
 # age, bpm

@@ -9,8 +9,8 @@ from app import Canvas, CanvasApp
 
 
 class InputNeuron:
-    Max = 25
-    Min = -25
+    Max = 1
+    Min = -1
 
     def __init__(self, x: int, y: int, radius: int, app: CanvasApp):
         self.x = x
@@ -87,8 +87,8 @@ class Neuron(InputNeuron):
 
 
 class Connection:
-    Max = 25
-    Min = -25
+    Max = 1
+    Min = -1
 
     def __init__(
         self,
@@ -114,7 +114,7 @@ class Connection:
             self.app.canvas.create_line(
                 (left_edge, neuron1.y),
                 (right_edge, neuron2.y),
-                width=2,
+                width=4,
                 dash=15,
             ),
         )
@@ -163,10 +163,16 @@ class NetworkVisualization:
         app: CanvasApp,
         input_visual: tuple[float, ...],
         extra_func,
+        inputs_=None,
+        labels=None,
         between_y=100,
         between_x=300,
         neuron_radius=50,
         padding=100,
+        loss=True,
+        learn=True,
+        learn_rate=0.5,
+        learn_amount=1,
     ) -> None:
         self.app = app
 
@@ -250,15 +256,39 @@ class NetworkVisualization:
 
             self.weights.append(weights)
 
-            biases[f"Layer Biases {i+1}"] = input_neurons
+            biases[f"Biases Layer {i+1}"] = input_neurons
 
-            layer_name = f"Layer Weights {i+1}"
+            layer_name = f"Weights Layer {i+1}"
             connections[layer_name] = layer_connections
 
         self.app.create_slider_menu(connections, biases, self.update_network)
 
+        def func():
+            for _ in range(learn_amount):
+                # print('learning!')
+                self.app.network.learn(inputs_, labels, learn_rate)
+                
+            self.update_network()
+        
+        self.doLoss = loss
+        self.inputs_ = inputs_
+        self.labels = labels
+        
+        if self.doLoss:
+            self.loss = tk.StringVar()
+
+            tk.CTkLabel(app, textvariable=self.loss, font=self.app.create_new_font(24)).place(x=self.app.width//2, y=self.app.height-50)
+            
+            self.loss.set("Loss: " + str(round(self.app.network.get_loss(self.inputs_, self.labels), 5)))
+            
+        if learn:
+            tk.CTkButton(app, command=func, text="Learn").place(x=200, y=self.app.height-50)
+
     def update_network(self):
         self.app.network.calculate_output(self.input_visual)
+        
+        if self.doLoss:
+            self.loss.set("Loss: " + str(round(self.app.network.get_loss(self.inputs_, self.labels), 5)))
 
         for i, layer in enumerate(self.app.network.activations):
             for j, activation in enumerate(layer):

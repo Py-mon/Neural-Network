@@ -1,7 +1,8 @@
-import examples.sigmoid
 import examples.line
 import examples.nonlinear
 import examples.step
+import examples.sigmoid
+
 
 # from network import Network
 # from graph import graph
@@ -29,7 +30,6 @@ import examples.step
 # app.mainloop()
 
 
-
 # https://stackoverflow.com/questions/10077644/how-to-display-text-with-font-and-color-using-pygame
 # https://stackoverflow.com/questions/24626583/update-marker-sizes-of-a-scatter-plot
 
@@ -48,7 +48,7 @@ import examples.step
 #     # print(network.activations[-1])
 #     # # x += 0.1
 #     # update_line()
-#     # print(network.get_avg_cost(input, output))
+#     # print(network.get_avg_loss(input, output))
 #     print(acc())
 
 
@@ -56,7 +56,7 @@ import examples.step
 
 
 # def func2():
-#     # print(network.get_avg_cost(input, output))
+#     # print(network.get_avg_loss(input, output))
 #     print(acc())
 #     print(network.calculate_outputs(inputs))
 
@@ -71,7 +71,7 @@ import examples.step
 # def func():
 #     print("learning")
 #     network.learn(input, output, 1)
-#     print(network.get_avg_cost(input, output))
+#     print(network.get_avg_loss(input, output))
 
 #     update_line()
 #     v.update_network2()
@@ -85,7 +85,6 @@ import examples.step
 # print(network.calculate_output((1, 0.20)))
 # plt.scatter(*np.array(((0, 0), (0.50, 0.50), (0.20, 0.9), (1, 0.20))).T, s=200)
 # print(acc())
-
 
 
 # root = tk.CTk()
