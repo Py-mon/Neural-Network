@@ -36,38 +36,41 @@ def shift_sideways(x, amt):
     if amt == 0:
         return x
     if amt > 0:
-        new[:,amt:] = x[:,:-amt]
+        new[:, amt:] = x[:, :-amt]
     else:
         amt = -amt
-        new[:,:-amt] = x[:,amt:]
+        new[:, :-amt] = x[:, amt:]
     return new
+
 
 def shift_vertically(x, amt):
     new = np.zeros_like(x)
     if amt == 0:
         return x
     if amt > 0:
-        new[amt:,:] = x[:-amt,:]
+        new[amt:, :] = x[:-amt, :]
     else:
         amt = -amt
-        new[:-amt,:] = x[amt:,:]
+        new[:-amt, :] = x[amt:, :]
     return new
 
-    
+
 import numpy as np
+
 
 def mutate(digit):
     digit = imutils.rotate(digit, random.randint(-5, 5))
-    digit = shift_sideways(digit, random.randint(-1, 1))     
-    digit = shift_vertically(digit, random.randint(-1, 1)) 
-    return digit    
-    
+    digit = shift_sideways(digit, random.randint(-1, 1))
+    digit = shift_vertically(digit, random.randint(-1, 1))
+    return digit
+
+
 for i in range(len(train)):
-    train[i] = mutate(train[i])   
-        
+    train[i] = mutate(train[i])
+
 for i in range(len(test)):
-    test[i] = mutate(test[i])  
-    
+    test[i] = mutate(test[i])
+
 
 # img = train[1]
 # img = np.array([img])
@@ -78,6 +81,7 @@ for i in range(len(test)):
 
 # plt.show()
 
+
 def train_model():
     model = keras.models.Sequential()
     model.add(keras.layers.Flatten(input_shape=(28, 28)))
@@ -85,21 +89,30 @@ def train_model():
     model.add(keras.layers.Dense(256, activation="relu"))
     model.add(keras.layers.Dense(10, activation="softmax"))
 
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    model.compile(
+        optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"]
+    )
 
     # sparse_categorical_crossentropy
 
-    model.fit(train, train_answers, epochs=8,)
+    model.fit(
+        train,
+        train_answers,
+        epochs=8,
+    )
 
     loss, accuracy = model.evaluate(test, test_answers)
 
     print(loss, accuracy)
 
     model.save("model.model")
-    
+
+
 # train_model()
 
-model: keras.models.Model = keras.models.load_model("model.model")
+model: keras.models.Model = keras.models.load_model(
+    r"C:\Users\jacob\OneDrive\Documents\Programming\Python\AI_Science_Project\NeuralNetwork\model.model"
+)
 # age, bpm
 # for i in range(10):
 #     img = train[i]

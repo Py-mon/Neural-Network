@@ -1,11 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import customtkinter as tk
-from network import Network
 from math import atan2, pi
-from typing import Optional
 from utils import grayscale_from_value, round3
-from app import Canvas, CanvasApp
+from app import CanvasApp
 
 
 class InputNeuron:
@@ -267,28 +265,38 @@ class NetworkVisualization:
             for _ in range(learn_amount):
                 # print('learning!')
                 self.app.network.learn(inputs_, labels, learn_rate)
-                
+
             self.update_network()
-        
+
         self.doLoss = loss
         self.inputs_ = inputs_
         self.labels = labels
-        
+
         if self.doLoss:
             self.loss = tk.StringVar()
 
-            tk.CTkLabel(app, textvariable=self.loss, font=self.app.create_new_font(24)).place(x=self.app.width//2, y=self.app.height-50)
-            
-            self.loss.set("Loss: " + str(round(self.app.network.get_loss(self.inputs_, self.labels), 5)))
-            
+            tk.CTkLabel(
+                app, textvariable=self.loss, font=self.app.create_new_font(24)
+            ).place(x=self.app.width // 2, y=self.app.height - 50)
+
+            self.loss.set(
+                "Loss: "
+                + str(round(self.app.network.get_loss(self.inputs_, self.labels), 5))
+            )
+
         if learn:
-            tk.CTkButton(app, command=func, text="Learn").place(x=200, y=self.app.height-50)
+            tk.CTkButton(app, command=func, text="Learn").place(
+                x=200, y=self.app.height - 50
+            )
 
     def update_network(self):
         self.app.network.calculate_output(self.input_visual)
-        
+
         if self.doLoss:
-            self.loss.set("Loss: " + str(round(self.app.network.get_loss(self.inputs_, self.labels), 5)))
+            self.loss.set(
+                "Loss: "
+                + str(round(self.app.network.get_loss(self.inputs_, self.labels), 5))
+            )
 
         for i, layer in enumerate(self.app.network.activations):
             for j, activation in enumerate(layer):

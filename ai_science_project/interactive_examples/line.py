@@ -22,7 +22,11 @@ network_visualization = NetworkVisualization(
     labels=labels
 )
 
-plt.ion()
-plt.show()
+def main():
+    plt.ion()
+    plt.show()
 
-app.mainloop()
+    app.mainloop()
+
+if __name__ == "__main__":
+    main()

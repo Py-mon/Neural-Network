@@ -44,7 +44,7 @@ def drawScreen(screen, grid):  # draw rectangles from grid array
 
 screen.fill((255, 255, 255))  # start screen
 import pygame
-from digits import read_grid
+from ai_science_project.train import read_grid
 
 font = pygame.font.SysFont("arial", 32)
 
@@ -61,8 +61,9 @@ Number = ""
 
 def update():
     screen.fill((255, 255, 255))
-    
-    pygame.draw.line(screen, 'black', (0, basicY * numberOfRows), (width, basicY * numberOfRows))
+
+    # pygame.draw.line(screen, 'black', (0, basicY * numberOfRows), (width, basicY * numberOfRows))
+
     screen.blit(clear_text, clear_rect)
     number_text = font.render(Number, True, (0, 0, 0))
     number_rect = number_text.get_rect()
@@ -70,6 +71,35 @@ def update():
 
     screen.blit(number_text, number_rect)
     drawScreen(screen, grid)
+
+    mult = 4 / 5
+    reverse = 1 - mult
+    pygame.draw.line(
+        screen,
+        "grey",
+        (0 + width * reverse, basicY * numberOfRows * mult),
+        (width * mult, basicY * numberOfRows * mult),
+    )
+    pygame.draw.line(
+        screen,
+        "grey",
+        (0 + width * reverse, basicY * numberOfRows * reverse),
+        (width * mult, basicY * numberOfRows * reverse),
+    )
+    pygame.draw.line(
+        screen,
+        "grey",
+        (0 + width * reverse, basicY * numberOfRows * reverse),
+        (0 + width * reverse, basicY * numberOfRows * mult),
+    )
+    pygame.draw.line(
+        screen,
+        "grey",
+        (0 + width * mult, basicY * numberOfRows * reverse),
+        (0 + width * mult, basicY * numberOfRows * mult),
+    )
+    # pygame.draw.line(screen, 'black', (0 + width * reverse, basicY * numberOfRows * mult), (width * mult, basicY * numberOfRows * mult))
+
     pygame.display.flip()
 
 
@@ -123,10 +153,10 @@ while True:
             xInGrid = int(x / basicX)
             yInGrid = int(y / basicY)
             try:
-                grid[yInGrid][xInGrid] -= 25
+                grid[yInGrid][xInGrid] -= 75
                 grid[yInGrid][xInGrid + 1] -= 6
                 grid[yInGrid + 1][xInGrid] -= 6
-                
+
                 if xInGrid - 1 >= 0:
                     grid[yInGrid][xInGrid - 1] -= 6
                 if yInGrid - 1 >= 0:

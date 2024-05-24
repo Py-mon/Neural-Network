@@ -16,7 +16,14 @@ NetworkVisualization(app, inputs, update_line, inputs_=inputs_, labels=labels)
 
 
 plt.axis("off")
-plt.ion()
-plt.show()
 
-app.mainloop()
+
+def main():
+    plt.ion()
+    plt.show()
+
+    app.mainloop()
+
+
+if __name__ == "__main__":
+    main()

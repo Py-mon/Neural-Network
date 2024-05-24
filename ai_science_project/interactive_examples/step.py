@@ -11,7 +11,7 @@ network.activation_function = lambda x: (x > 0).astype(int)
 
 app = CanvasApp(1000, 700, network)
 
-update_line, inputs_, labels = graph(network, lambda x, y: y < abs(x - .5))
+update_line, inputs_, labels = graph(network, lambda x, y: y < abs(x - 0.5))
 v = NetworkVisualization(
     app,
     inputs,
@@ -21,8 +21,15 @@ v = NetworkVisualization(
     learn=False,
 )
 
-plt.axis('off')
-plt.ion()
-plt.show()
+plt.axis("off")
 
-app.mainloop()
+
+def main():
+    plt.ion()
+    plt.show()
+
+    app.mainloop()
+
+
+if __name__ == "__main__":
+    main()
