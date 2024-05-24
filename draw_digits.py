@@ -44,7 +44,7 @@ def drawScreen(screen, grid):  # draw rectangles from grid array
 
 screen.fill((255, 255, 255))  # start screen
 import pygame
-from ai_science_project.train import read_grid
+from neural_network.train import read_grid
 
 font = pygame.font.SysFont("arial", 32)
 
