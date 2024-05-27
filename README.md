@@ -1,11 +1,15 @@
 2024 Science Fair Project Winner
 
-Interact with NInteractive neural network examples.
+A science fair project where I learned how neural networks work.
 
-Ever wondered how AI and Neural Networks work? This repo has tons of interactive example of neural networks. 
-Including:
-- Real-time visualization of Neural Networks
+Ever wondered how AI and Neural Networks work? This repository has tons of interactive examples of neural networks, including:
+- Real-time visualization of Neural Networks and their predictions
 - Teaching the neural network yourself by slidng the weights and biases
+- Draw hand-drawn digits and see the network guess
+https://github.com/PythonDominator/NeuralNetwork/assets/102424561/6d34e60f-c200-4c75-a963-12711356835e
+- Graphs of different activation functions
+![image](https://github.com/PythonDominator/Neural-Network/assets/102424561/a8f6c83c-aa5d-499a-9d2f-7a0bfa7107c7)
+![image](https://github.com/PythonDominator/Neural-Network/assets/102424561/46d4c6fe-a63e-4ef3-bb4f-4957d0444510)
 
 
 
@@ -13,7 +17,4 @@ Including:
 
 
 ![image1 (002)](https://github.com/PythonDominator/NeuralNetwork/assets/102424561/11f817f6-edc8-4477-b97f-b2213cb3d64b)
-
-
-https://github.com/PythonDominator/NeuralNetwork/assets/102424561/6d34e60f-c200-4c75-a963-12711356835e
 
