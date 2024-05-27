@@ -111,7 +111,7 @@ def train_model():
 # train_model()
 
 model: keras.models.Model = keras.models.load_model(
-    r"C:\Users\jacob\OneDrive\Documents\Programming\Python\AI_Science_Project\NeuralNetwork\model.model"
+    r"C:\Users\jacob\OneDrive\Documents\Programming\Python\AI_Science_Project\neural_network\model.model"
 )
 # age, bpm
 # for i in range(10):

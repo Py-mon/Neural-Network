@@ -1,4 +1,4 @@
-from network import Network
+from ..network import Network
 from graph import graph
 from visualize import NetworkVisualization
 from app import CanvasApp
@@ -30,6 +30,4 @@ def main():
 
     app.mainloop()
 
-
-if __name__ == "__main__":
-    main()
+main()
