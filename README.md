@@ -26,6 +26,6 @@ Ever wondered how AI and Neural Networks work? This repository has tons of inter
 ![image](https://github.com/PythonDominator/Neural-Network/assets/102424561/46d4c6fe-a63e-4ef3-bb4f-4957d0444510)
 
 Thanks to, 
-[Sebastian Lague](https://www.youtube.com/watch?v=aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi) and [3Blue1Brown](https://www.youtube.com/@3blue1brown)
+[Sebastian Lague](https://www.youtube.com/watch?v=hfMk-kjRv4c&t=1181s) and [3Blue1Brown](https://www.youtube.com/watch?v=aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi)
 
 
